@@ -5,7 +5,7 @@ import { FarmScene } from './game/scene.js';
 import { executeProgram, validateProgram } from './game/interpreter.js';
 import { objectivesComplete } from './game/objectives.js';
 import { showSuccess } from './celebration.js';
-import { setMusicWorld, playEffect } from './audio.js';
+import { setMusicWorld, playEffect, playDrive } from './audio.js';
 import { initGamepad, controllerGuide } from './gamepad.js';
 import { successMessages, fallbackSuccess } from './data/successMessages.js';
 
@@ -150,6 +150,7 @@ async function runProgram(){
         if(step.type==='plant'){playEffect('plant');farmScene.setSeeds(step.seeds);await farmScene.plantCrop(step.tile);await wait(150);return;}
         if(step.type==='fix'){playEffect('plant');farmScene.setSeeds(step.tools);await farmScene.fixTile(step.tile);await wait(150);return;}
         if(step.type==='return'){await wait(450);return;}
+        if(step.type==='move')playDrive(l.world===5);
         await farmScene.moveTractor(step.position,step.facing,step.type==='move'?350:220);await wait(100);
       }
     });

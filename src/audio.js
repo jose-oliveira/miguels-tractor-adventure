@@ -51,6 +51,24 @@ export function playEffect(name) {
   effect.play().catch(() => {});
 }
 
+// Engine sound for forward moves: one clip spans consecutive moves and fades out once the tractor stops.
+let drive = null, driveName = null, driveStop = 0;
+export function playDrive(space) {
+  const name = space ? 'forward-space' : 'forward';
+  if (!drive || driveName !== name || drive.ended) {
+    if (drive) drive.pause();
+    drive = new Audio(`${BASE}${name}.mp3`);
+    driveName = name;
+    drive.volume = .8;
+    drive.play().catch(() => {});
+  } else if (drive.volume < .8) {
+    clearInterval(drive.fadeTimer);
+    drive.volume = .8;
+  }
+  clearTimeout(driveStop);
+  driveStop = setTimeout(() => { const d = drive; if (d) fade(d, 0, 300, () => { d.pause(); if (drive === d) drive = null; }); }, 700);
+}
+
 // Finale song; the background music stays silent until it ends.
 export function playFinale() {
   if (win) { win.onended = null; win.pause(); }
