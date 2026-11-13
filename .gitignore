@@ -1,0 +1,6 @@
+node_modules
+dist
+.vscode
+reference-assets
+public/assets/reference
+.DS_Store
